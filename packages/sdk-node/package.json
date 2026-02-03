@@ -1,0 +1,19 @@
+{
+    "name": "@authkit/node",
+    "version": "0.0.1",
+    "description": "Node.js SDK for AuthKit",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "jsonwebtoken": "^9.0.0",
+        "axios": "^1.6.0"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.0",
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0"
+    }
+}

@@ -1,0 +1,13 @@
+name: Security Vulnerability Report
+description: Report a security vulnerability
+title: "[Security]: "
+labels: ["security", "triage", "urgent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **PLEASE DO NOT FILE PUBLIC ISSUES FOR SECURITY VULNERABILITIES.**
+        
+        If you believe you have found a security vulnerability, please refer to our [Security Policy](../../SECURITY.md) for instructions on how to report it responsibly.
+        
+        If this is NOT a security vulnerability, please use the Bug Report template.

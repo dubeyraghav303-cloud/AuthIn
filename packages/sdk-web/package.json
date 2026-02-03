@@ -1,0 +1,10 @@
+{
+    "name": "@authkit/web",
+    "version": "0.0.1",
+    "main": "index.ts",
+    "private": true,
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "@authkit/config": "workspace:*"
+    }
+}

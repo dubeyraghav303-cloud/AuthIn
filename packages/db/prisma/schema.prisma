@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  resetTokenHash    String?
+  resetTokenExpires DateTime?
+  
+  tenants       TenantMember[]
+  sessions      Session[]
+  authenticators Authenticator[]
+  auditLogs     AuditLog[]
+  accounts      Account[]
+  invitationsSent TenantInvitation[]
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Tenant {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     TenantMember[]
+  auditLogs   AuditLog[]
+  invitations TenantInvitation[]
+}
+
+model TenantInvitation {
+  id        String   @id @default(uuid())
+  email     String
+  tenantId  String
+  role      Role     @default(MEMBER)
+  token     String   @unique
+  expires   DateTime
+  inviterId String
+  createdAt DateTime @default(now())
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  inviter   User     @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+  
+  @@unique([email, tenantId])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+model TenantMember {
+  id        String   @id @default(uuid())
+  userId    String
+  tenantId  String
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionTokenHash String   @unique // The HASH of the refresh token
+  userId       String
+  expires      DateTime
+  userAgent    String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+  lastActive   DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Refresh Token Rotation
+  familyId     String?  @default(uuid())
+  parentTokenId String? // The ID of the session that created this one
+  replacedByTokenId String? @unique // The ID of the session that replaced this one
+  revokedAt    DateTime?
+  
+  parentSession Session? @relation("SessionChain", fields: [parentTokenId], references: [id])
+  childrenSession Session[] @relation("SessionChain")
+  
+  replacedBySession Session? @relation("SessionReplacement", fields: [replacedByTokenId], references: [id])
+  replacingSession Session? @relation("SessionReplacement")
+}
+
+model Authenticator {
+  id                   String  @id @default(uuid())
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  metadata  Json?
+  userId    String
+  tenantId  String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}

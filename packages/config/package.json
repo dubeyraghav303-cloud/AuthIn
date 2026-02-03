@@ -1,0 +1,12 @@
+{
+  "name": "@authkit/config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  }
+}

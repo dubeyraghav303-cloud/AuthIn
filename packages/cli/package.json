@@ -1,0 +1,28 @@
+{
+    "name": "@authkit/cli",
+    "version": "0.0.1",
+    "description": "AuthKit CLI for local development and management",
+    "main": "dist/index.js",
+    "bin": {
+        "authkit": "./bin/authkit.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "ts-node src/index.ts"
+    },
+    "dependencies": {
+        "commander": "^11.1.0",
+        "chalk": "^4.1.2",
+        "ora": "^5.4.1",
+        "execa": "^5.1.1",
+        "inquirer": "^8.2.6",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/inquirer": "^9.0.7",
+        "typescript": "^5.0.0",
+        "ts-node": "^10.9.1"
+    }
+}
