@@ -27,12 +27,12 @@ Render is the easiest way to provision both databases alongside your API.
 
 ### Redis (The Cache)
 1.  Go to [Render Dashboard](https://dashboard.render.com).
-2.  Click **New +** -> **Redis**.
+2.  Click **New +** -> **Key Value** (this is Render's Redis service).
 3.  **Basic Settings**:
     *   **Name**: `authkit-redis`
     *   **Region**: Same as your **API**.
     *   **Instance Type**: Free (for dev) or Starter.
-4.  Click **Create Redis**.
+4.  Click **Create Key Value**.
 5.  **Get Configuration**:
     *   Find the **Internal Connection URL** (e.g., `redis://hostname:6379`).
     *   Copy this value.
