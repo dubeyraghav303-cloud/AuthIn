@@ -25,10 +25,15 @@ export class WebAuthnService {
         this.origin = this.configService.get<string>('ORIGIN') || 'http://localhost:3000';
 
         // Initialize Redis
-        this.redis = new Redis({
-            host: this.configService.get('REDIS_HOST') || 'localhost',
-            port: parseInt(this.configService.get('REDIS_PORT') || '6379'),
-        });
+        const redisUrl = this.configService.get<string>('REDIS_URL');
+        if (redisUrl) {
+            this.redis = new Redis(redisUrl);
+        } else {
+            this.redis = new Redis({
+                host: this.configService.get('REDIS_HOST') || 'localhost',
+                port: parseInt(this.configService.get('REDIS_PORT') || '6379'),
+            });
+        }
     }
 
     // --- Registration ---

@@ -8,10 +8,15 @@ export class ThrottlerStorageRedisService implements ThrottlerStorage, OnModuleI
     private redis: Redis;
 
     constructor(private configService: ConfigService) {
-        this.redis = new Redis({
-            host: 'localhost', // In prod, use configService.get('REDIS_HOST')
-            port: 6379,
-        });
+        const redisUrl = this.configService.get<string>('REDIS_URL');
+        if (redisUrl) {
+            this.redis = new Redis(redisUrl);
+        } else {
+            this.redis = new Redis({
+                host: this.configService.get('REDIS_HOST') || 'localhost',
+                port: parseInt(this.configService.get('REDIS_PORT') || '6379'),
+            });
+        }
     }
 
     onModuleInit() {
