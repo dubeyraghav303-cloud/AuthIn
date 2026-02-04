@@ -25,7 +25,7 @@ export function Hero() {
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4">
                     <Link
-                        href="/docs"
+                        href="https://auth-in-web-v48i.vercel.app/sign-in"
                         className="h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center gap-2 transition-all w-full md:w-auto justify-center"
                     >
                         Get Started <ArrowRight className="w-4 h-4" />
